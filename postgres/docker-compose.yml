@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    build: ./postgres  
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: va2pt
+      POSTGRES_PASSWORD: va2ptpass
+      POSTGRES_DB: va2ptdb
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    # healthcheck:
+    #   test: ["CMD", "pg_isready", "-U", "va2pt"]
+    #   interval: 10s
+    #   retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: tekchand@va2pt.com
+      PGADMIN_DEFAULT_PASSWORD: va2pt
+    ports:
+      - "5050:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+    driver: local

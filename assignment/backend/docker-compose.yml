@@ -1,0 +1,30 @@
+# services:
+#   backend:
+#     build: .
+#     container_name: backend_service
+#     restart: always
+#     # environment:
+#     #   - DATABASE_URL=${DATABASE_URL}
+#     ports:
+#       - "8000:8000"
+#     networks:
+#       - backend_service
+
+# networks:
+#   backend_service:
+#     driver: bridge
+services:
+  backend:
+    build: .
+    container_name: backend_service
+    restart: always
+    environment:
+      DATABASE_URL: "postgresql://va2pt:passva2pt@172.18.0.2:5432/va2ptdb"
+    ports:
+      - "8000:8000"
+    networks:
+      - test_default  # Use the correct network name
+
+networks:
+  test_default:
+    external: true  # Ensure we use the network PostgreSQL is in
