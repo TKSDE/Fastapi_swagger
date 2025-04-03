@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: frontend_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - test_default  # Backend wale network se connect karna
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:8000  # Backend ka internal URL
+
+networks:
+  test_default:
+    external: true  # Pehle se bana hua network use karega
